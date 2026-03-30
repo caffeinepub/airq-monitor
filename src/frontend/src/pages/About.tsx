@@ -1,10 +1,13 @@
 import {
   Calculator,
+  Cpu,
   FlaskConical,
   Leaf,
   Target,
   Thermometer,
+  Wifi,
   Wind,
+  Zap,
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -32,6 +35,35 @@ const sensors = [
     title: "DHT-11 Temp & Humidity Sensor",
     targets: ["Temperature (°C)", "Relative Humidity (%)", "Heat Index"],
     desc: "Capacitive humidity sensing element combined with a NTC thermistor. 1-wire single-bus protocol. Accuracy: ±2°C temperature, ±5% RH. Sampling rate up to 1 Hz. Suitable for indoor HVAC monitoring.",
+  },
+];
+
+const esp32Specs = [
+  { label: "MCU", value: "Xtensa LX6 dual-core @ 240 MHz" },
+  { label: "Flash", value: "4 MB SPI flash" },
+  { label: "RAM", value: "520 KB SRAM" },
+  { label: "Wi-Fi", value: "802.11 b/g/n (2.4 GHz)" },
+  { label: "Bluetooth", value: "BT 4.2 + BLE" },
+  { label: "ADC", value: "12-bit, 18 channels" },
+  { label: "GPIO", value: "34 programmable pins" },
+  { label: "Supply", value: "3.3 V logic, 5 V via USB" },
+];
+
+const esp32Features = [
+  {
+    icon: Wifi,
+    label: "Wi-Fi",
+    desc: "Streams sensor data directly to the Python server over 802.11 b/g/n — no USB cable required.",
+  },
+  {
+    icon: Zap,
+    label: "Low Power",
+    desc: "Deep-sleep mode draws <10 µA, enabling battery-powered deployments between sampling intervals.",
+  },
+  {
+    icon: Cpu,
+    label: "Dual-Core",
+    desc: "One core handles sensor polling and ADC reads; the other manages Wi-Fi transmission and JSON serialization.",
   },
 ];
 
@@ -81,6 +113,56 @@ export default function About() {
           </motion.div>
         ))}
       </div>
+
+      {/* ESP32 Section */}
+      <section>
+        <h2 className="text-base font-semibold text-foreground mb-2">
+          ESP32 Microcontroller
+        </h2>
+        <p className="text-xs text-muted-foreground mb-5">
+          The ESP32 is the brain of the sensor node — it reads all three
+          sensors, performs ADC conversion, and transmits data to the Python
+          backend over Wi-Fi.
+        </p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
+          {esp32Features.map(({ icon: Icon, label, desc }, i) => (
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="glass-card p-5 border border-cyan-neon/15"
+            >
+              <div className="w-9 h-9 rounded-xl bg-cyan-neon/10 border border-cyan-neon/20 flex items-center justify-center mb-3">
+                <Icon className="w-4 h-4 text-cyan-neon" />
+              </div>
+              <h3 className="text-sm font-semibold text-foreground mb-1">
+                {label}
+              </h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {desc}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+        <div className="glass-card p-5">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+            Technical Specifications
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {esp32Specs.map(({ label, value }) => (
+              <div key={label} className="rounded-lg bg-white/3 px-3 py-2.5">
+                <p className="text-[10px] text-muted-foreground mb-0.5 uppercase tracking-wider">
+                  {label}
+                </p>
+                <p className="text-xs font-semibold text-foreground font-mono">
+                  {value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Sensor cards */}
       <section>

@@ -66,7 +66,7 @@ const stats = [
 
 const pipelineNodes = [
   { icon: Wind, label: "Sensors" },
-  { icon: Cpu, label: "Arduino" },
+  { icon: Cpu, label: "ESP32" },
   { icon: Activity, label: "Python" },
   { icon: Brain, label: "AI Models" },
   { icon: Database, label: "Database" },
